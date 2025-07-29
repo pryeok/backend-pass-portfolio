@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class BackendportfolioApplication {
     public static void main(String[] args) {
-        System.out.println("yes!!");
+        System.out.println("goodgood!!");
         SpringApplication.run(BackendportfolioApplication.class, args);
     }
 
