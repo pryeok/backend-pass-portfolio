@@ -26,6 +26,11 @@ public class ExternalApiUpdateRecoveryService {
 //    @Scheduled(fixedDelay = 300000) // 5분
     public void recoverMissingExternalIds() {
         // 1. external_id가 없는 참가자들 조회
+        // 암시적 = 명시적이지 않다
+        // externalId null 인 애들을 왜 뽑아오지?
+        // status = PENDING
+        // status = EXTERNAL_API_UPDATE_FAILED
+        // status = COMPLETED
         List<EventWithLockParticipant> participantsWithoutExternalId = participantRepository.findByExternalIdIsNullAndCreatedAtBefore(
                 LocalDateTime.now()
         );

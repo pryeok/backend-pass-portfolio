@@ -22,12 +22,18 @@ public class EventWithLockService {
 
     @Transactional
     public void joinEventOptimistic(Long eventId, Long memberId) {
+
+        // 1. 이벤트 정보를 가져옴.
         EventWithLock event = eventRepository.findByIdWithOptimisticLock(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("이벤트를 찾을 수 없습니다."));
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
 
+        // 2. 이벤트 정보를 확인하고, version = 100 이니? 100이 아니라면 에러 뱉어.
+        // 그리고 만약 이벤트의 버젼이 일치한다면 참가자수를 늘려줘.
         event.increaseParticipants();
+
+        // 3. 낙관적 락은 배타적 락과 다르게 잡고 있지 않기 때문에 flush 필요.
         eventRepository.saveAndFlush(event);
 
         EventWithLockParticipant participant = EventWithLockParticipant.builder()

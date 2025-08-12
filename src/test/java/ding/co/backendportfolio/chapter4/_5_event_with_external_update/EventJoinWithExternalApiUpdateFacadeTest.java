@@ -32,8 +32,19 @@ import static org.mockito.Mockito.doAnswer;
 class EventJoinWithExternalApiUpdateFacadeTest {
     @Autowired
     private EventJoinWithExternalApiUpdateFacade externalApiResponseFacade;
+
+
+    // MockBean -> 둘다 테스트용으로 한번 감싸서 만든것들
+    // MockBean -> null 행동을 정의해주지 않으면, 그냥 에러가 발생
+    // 특정 상황에 대해서 완전 결과를 제어하고 싶을 수가 있음
+    // 3번 과정 (updateExternalId 라는 것을 호출했을 때 실패하길 원함)
+    // 즉 EventExternalUpdateService updateExternalId 할려고 하면 실패해!!
+    // Mocking -> 방식 중 하나라 MockBean
     @MockBean
     private EventExternalUpdateService eventJoinService;
+
+    // Spybean -> Mocking 보다는 조금 더 가벼운 행위
+    // Spy -> 감시하다. 해당 빈이 어떤 식으로 동작하는지 감시하기 위한 wrapping 객체
     @SpyBean
     private ExternalEventApi externalEventApi;
 
@@ -50,8 +61,11 @@ class EventJoinWithExternalApiUpdateFacadeTest {
                 .mapToObj(i -> Chapter4Fixture.createTestMember("테스트유저" + i))
                 .collect(Collectors.toList());
 
+        // 2번 Api가 얼마나 성공했는지 알 수 있는 변수
         externalApiCallCount = new AtomicInteger(0);
+        // 3번 외부 API 응답으로 참가자 정보 업데이트를 얼마나 호출했는지 알 수 있는 변수
         updateExternalIdCallCount = new AtomicInteger(0);
+        // 3번 외부 API 응답으로 참가자 정보 업데이트를 얼마나 성공했는지 알 수 있는 변수
         updateExternalIdSuccessCount = new AtomicInteger(0);
 
         doAnswer(invocation -> {
