@@ -26,6 +26,16 @@ public class BookPracticeService {
         String serialized = redisTemplate.opsForValue().get(cacheKey);
         if (serialized != null) {
             log.info(">> 1. 캐시 HIT - 캐시 값 반환");
+//            serialized = "Book(id=1, name='test')"
+//                    Book(id=1, name='test')
+//            문자열을 특정 객체로 변환하는 과정을 deserialize -> 역직렬화
+//            특정 객체를 문자열로 변환하는 과정을 serialize -> 직렬화
+//            Book(id=1, name='test') -serialize> "Book("
+//            "Book(" -deserialize >Book(id=1, name='test')
+//            캐시내에서, Redis -> String. Book()
+//            어플리케이션 코드에서는 클래스 -> Redis 에 저장하려면 문자열로 바꿔야해. 즉, 직렬화 해야함
+//            Redis 에서 문자열 -> 어플리케이션 클래스로 바꿔야해. 즉, 역직렬화 해야하는 상황
+
             return objectMapper.readValue(serialized, Book.class);
         }
 
