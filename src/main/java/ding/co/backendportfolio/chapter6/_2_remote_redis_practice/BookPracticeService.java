@@ -35,7 +35,6 @@ public class BookPracticeService {
 //            캐시내에서, Redis -> String. Book()
 //            어플리케이션 코드에서는 클래스 -> Redis 에 저장하려면 문자열로 바꿔야해. 즉, 직렬화 해야함
 //            Redis 에서 문자열 -> 어플리케이션 클래스로 바꿔야해. 즉, 역직렬화 해야하는 상황
-
             return objectMapper.readValue(serialized, Book.class);
         }
 
